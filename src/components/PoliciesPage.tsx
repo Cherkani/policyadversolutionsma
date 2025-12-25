@@ -13,41 +13,47 @@ export default function PoliciesPage({ onAgree, language }: PoliciesPageProps) {
   const [selectedTabId, setSelectedTabId] = useState(policyTabs[0].id)
   const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false)
   const contentRef = useRef<HTMLDivElement>(null)
+  const sentinelRef = useRef<HTMLDivElement>(null)
+  const [isDesktop, setIsDesktop] = useState<boolean>(() =>
+    typeof window !== "undefined" ? window.matchMedia("(min-width: 640px)").matches : false,
+  )
 
   const selectedPolicy = policyTabs.find((tab) => tab.id === selectedTabId)!
 
   useEffect(() => {
+    if (typeof window === "undefined") return
+    const media = window.matchMedia("(min-width: 640px)")
+    const handler = (event: MediaQueryListEvent) => setIsDesktop(event.matches)
+    setIsDesktop(media.matches)
+    media.addEventListener("change", handler)
+    return () => media.removeEventListener("change", handler)
+  }, [])
+
+  useEffect(() => {
     const element = contentRef.current
-    element?.scrollTo({ top: 0 })
-    const updateScrollableState = () => {
-      const el = contentRef.current
-      if (!el) return
+    const sentinel = sentinelRef.current
+    if (!element || !sentinel) return
 
-      if (el.scrollHeight <= el.clientHeight + 5) {
-        setHasScrolledToBottom(true)
-      } else if (el.scrollTop + el.clientHeight < el.scrollHeight - 50) {
-        setHasScrolledToBottom(false)
-      }
-    }
+    element.scrollTo({ top: 0 })
+    setHasScrolledToBottom(false)
 
-    updateScrollableState()
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHasScrolledToBottom(true)
+        }
+      },
+      {
+        root: isDesktop ? element : null,
+        threshold: 0.05,
+        rootMargin: isDesktop ? "0px" : "0px 0px -80px 0px",
+      },
+    )
 
-    const handleScroll = () => {
-      const el = contentRef.current
-      if (!el) return
-      if (el.scrollTop + el.clientHeight >= el.scrollHeight - 50) {
-        setHasScrolledToBottom(true)
-      }
-    }
+    observer.observe(sentinel)
 
-    element?.addEventListener("scroll", handleScroll)
-    window.addEventListener("resize", updateScrollableState)
-
-    return () => {
-      element?.removeEventListener("scroll", handleScroll)
-      window.removeEventListener("resize", updateScrollableState)
-    }
-  }, [selectedTabId])
+    return () => observer.disconnect()
+  }, [selectedTabId, isDesktop])
 
   return (
     <div className="space-y-6 p-6 lg:p-10">
@@ -106,7 +112,7 @@ export default function PoliciesPage({ onAgree, language }: PoliciesPageProps) {
           <div className="absolute bottom-10 right-10 h-40 w-40 rounded-full bg-brand/20" />
           <div className="absolute top-6 left-1/4 h-32 w-32 rounded-full bg-indigo-200/30 dark:bg-indigo-900/20" />
         </div>
-        <div ref={contentRef} className="relative max-h-[70vh] min-h-[60vh] overflow-y-auto">
+        <div ref={contentRef} className="relative min-h-[60vh] sm:max-h-[70vh] sm:overflow-y-auto">
           <div className="px-4 py-6 sm:px-8 sm:py-8">
             <div className="flex flex-col gap-6">
               <div>
@@ -157,6 +163,7 @@ export default function PoliciesPage({ onAgree, language }: PoliciesPageProps) {
               })}
             </div>
           </div>
+          <div ref={sentinelRef} className="h-2 w-full" aria-hidden />
         </div>
         <div className="border-t border-slate-200/70 bg-slate-50/80 p-6 dark:border-slate-800/70 dark:bg-slate-900/60">
           <button
