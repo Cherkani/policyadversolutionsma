@@ -17,26 +17,37 @@ export default function PoliciesPage({ onAgree, language }: PoliciesPageProps) {
   const selectedPolicy = policyTabs.find((tab) => tab.id === selectedTabId)!
 
   useEffect(() => {
-    setHasScrolledToBottom(false)
-  }, [selectedTabId])
+    const element = contentRef.current
+    element?.scrollTo({ top: 0 })
+    const updateScrollableState = () => {
+      const el = contentRef.current
+      if (!el) return
 
-  useEffect(() => {
+      if (el.scrollHeight <= el.clientHeight + 5) {
+        setHasScrolledToBottom(true)
+      } else if (el.scrollTop + el.clientHeight < el.scrollHeight - 50) {
+        setHasScrolledToBottom(false)
+      }
+    }
+
+    updateScrollableState()
+
     const handleScroll = () => {
-      if (!contentRef.current) return
-
-      const { scrollTop, scrollHeight, clientHeight } = contentRef.current
-      const scrolledToBottom = scrollTop + clientHeight >= scrollHeight - 50
-
-      if (scrolledToBottom) {
+      const el = contentRef.current
+      if (!el) return
+      if (el.scrollTop + el.clientHeight >= el.scrollHeight - 50) {
         setHasScrolledToBottom(true)
       }
     }
 
-    const element = contentRef.current
     element?.addEventListener("scroll", handleScroll)
+    window.addEventListener("resize", updateScrollableState)
 
-    return () => element?.removeEventListener("scroll", handleScroll)
-  }, [])
+    return () => {
+      element?.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("resize", updateScrollableState)
+    }
+  }, [selectedTabId])
 
   return (
     <div className="space-y-6 p-6 lg:p-10">
@@ -95,7 +106,7 @@ export default function PoliciesPage({ onAgree, language }: PoliciesPageProps) {
           <div className="absolute bottom-10 right-10 h-40 w-40 rounded-full bg-brand/20" />
           <div className="absolute top-6 left-1/4 h-32 w-32 rounded-full bg-indigo-200/30 dark:bg-indigo-900/20" />
         </div>
-        <div ref={contentRef} className="relative max-h-full overflow-y-auto sm:max-h-[70vh]">
+        <div ref={contentRef} className="relative max-h-[70vh] min-h-[60vh] overflow-y-auto">
           <div className="px-4 py-6 sm:px-8 sm:py-8">
             <div className="flex flex-col gap-6">
               <div>
