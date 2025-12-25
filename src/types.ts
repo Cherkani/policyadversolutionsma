@@ -23,3 +23,5 @@ export interface PolicySection {
 }
 
 export type PageType = "policies" | "payment"
+
+export type Language = "en" | "fr" | "ar"
