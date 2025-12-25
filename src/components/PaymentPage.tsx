@@ -37,37 +37,41 @@ export default function PaymentPage({ language, onBack }: PaymentPageProps) {
 
   return (
     <div className="space-y-6 p-6 lg:p-10">
-      <div className="flex flex-col gap-4 rounded-2xl bg-slate-50/80 p-6 shadow-inner dark:bg-slate-800/40">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="relative flex flex-col gap-4 overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900/80 via-slate-900/60 to-blue-900/40 p-6 text-white shadow-inner dark:bg-slate-900/60">
+        <div className="pointer-events-none absolute inset-0 opacity-50 blur-2xl">
+          <div className="absolute top-0 left-0 h-32 w-32 rounded-full bg-brand/30" />
+          <div className="absolute bottom-0 right-14 h-36 w-36 rounded-full bg-indigo-500/30" />
+        </div>
+        <div className="relative flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+            <h1 className="text-3xl font-bold">
               {translate("Payment Methods", language)}
             </h1>
-            <p className="text-slate-600 dark:text-slate-300">
+            <p className="text-sm text-slate-200">
               {translate("Click on a payment method to view payment details", language)}
-            </p>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              {translate("Payment instructions are available in your preferred language.", language)}
             </p>
           </div>
           <button
             type="button"
             onClick={onBack}
-            className={`inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-white hover:text-slate-900 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-900 ${rtl ? "flex-row-reverse" : ""}`}
+            className={`inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-sm font-semibold text-white/80 hover:text-white ${rtl ? "flex-row-reverse" : ""}`}
           >
             <span aria-hidden>{backArrow}</span>
             <span>{translate("Back to Policies", language)}</span>
           </button>
         </div>
+        <p className="relative text-xs uppercase tracking-[0.3em] text-slate-300">
+          {translate("Payment instructions are available in your preferred language.", language)}
+        </p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {badges.map((badge, index) => (
           <div
             key={index}
-            className="flex items-center gap-4 rounded-2xl border border-emerald-200/60 bg-white/80 p-4 shadow-inner dark:border-slate-700 dark:bg-slate-900/70"
+            className="flex items-center gap-4 rounded-2xl border border-slate-200/40 bg-white/90 p-4 shadow-inner dark:border-slate-700 dark:bg-slate-900/70"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-300">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-900/5 text-brand dark:bg-slate-900/50">
               <badge.icon className="h-5 w-5" />
             </div>
             <div>
@@ -93,7 +97,7 @@ export default function PaymentPage({ language, onBack }: PaymentPageProps) {
       <div className="rounded-2xl border border-slate-200/80 bg-white p-8 shadow-lg dark:border-slate-800/70 dark:bg-slate-900">
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-1 items-start gap-4">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-emerald-400 text-white shadow-lg">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-brand to-indigo-500 text-white shadow-lg">
               <MessageCircle className="h-7 w-7" />
             </div>
             <div>
@@ -105,7 +109,7 @@ export default function PaymentPage({ language, onBack }: PaymentPageProps) {
           </div>
           <button
             onClick={handleContactSupport}
-            className="inline-flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-slate-900 to-slate-700 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-slate-400/40 transition hover:scale-[1.01] dark:from-slate-700 dark:to-slate-600"
+            className="inline-flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-slate-900 via-brand to-indigo-500 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-slate-400/40 transition hover:scale-[1.01]"
           >
             <Phone className="h-5 w-5" />
             {translate("Contact Support", language)}

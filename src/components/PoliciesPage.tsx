@@ -40,7 +40,12 @@ export default function PoliciesPage({ onAgree, language }: PoliciesPageProps) {
 
   return (
     <div className="space-y-6 p-6 lg:p-10">
-      <div className="rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 text-white shadow-elevated">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 p-8 text-white shadow-elevated">
+        <div className="pointer-events-none absolute inset-0 opacity-60 blur-2xl">
+          <div className="absolute -top-10 left-10 h-40 w-40 rounded-full bg-brand/30" />
+          <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-purple-500/20" />
+        </div>
+        <div className="relative">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-white/70">
@@ -75,13 +80,33 @@ export default function PoliciesPage({ onAgree, language }: PoliciesPageProps) {
             )
           })}
         </div>
+        </div>
       </div>
 
-      <div className="rounded-2xl border border-slate-200/70 bg-white/90 shadow-lg shadow-slate-200/60 dark:border-slate-800/60 dark:bg-slate-900/80 dark:shadow-slate-900/40">
-        <div ref={contentRef} className="h-[520px] overflow-y-auto p-8">
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
-            {translate(selectedPolicy.title, language)}
-          </h2>
+      <div className="relative overflow-hidden rounded-2xl border border-slate-200/70 bg-gradient-to-b from-white/95 to-emerald-50/40 shadow-lg shadow-slate-200/60 dark:border-slate-800/60 dark:from-slate-900/80 dark:to-slate-900/40 dark:shadow-slate-900/40">
+        <div className="pointer-events-none absolute inset-0 opacity-40 blur-2xl">
+          <div className="absolute bottom-10 right-10 h-40 w-40 rounded-full bg-brand/20" />
+          <div className="absolute top-6 left-1/4 h-32 w-32 rounded-full bg-indigo-200/30 dark:bg-indigo-900/20" />
+        </div>
+        <div ref={contentRef} className="relative max-h-[70vh] overflow-y-auto p-6 sm:p-8">
+          <div className="flex flex-col gap-6">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400 dark:text-slate-500">
+                {translate(selectedPolicy.label, language)}
+              </p>
+              <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+                {translate(selectedPolicy.title, language)}
+              </h2>
+            </div>
+            <div className="grid gap-3 text-xs font-semibold text-slate-600 dark:text-slate-300 md:grid-cols-2">
+              <span className="rounded-2xl bg-slate-900/5 px-4 py-2 shadow-inner dark:bg-slate-900/60">
+                {translate("Step 1 · Review Policies", language)}
+              </span>
+              <span className="rounded-2xl bg-slate-900/5 px-4 py-2 shadow-inner dark:bg-slate-900/60">
+                {translate("Language", language)}: {getLanguageLabel(language)}
+              </span>
+            </div>
+          </div>
           <div className="mt-6 space-y-10">
             {selectedPolicy.sections.map((section, index) => {
               const translatedHeading = translate(section.heading, language)
@@ -90,7 +115,10 @@ export default function PoliciesPage({ onAgree, language }: PoliciesPageProps) {
                 : translate(section.content, language)
 
               return (
-                <section key={index} className="rounded-2xl bg-slate-50/70 p-6 dark:bg-slate-800/50">
+                <section
+                  key={index}
+                  className="rounded-2xl border border-slate-100/70 bg-white/90 p-6 shadow-sm dark:border-slate-800/60 dark:bg-slate-900/70"
+                >
                   <h3 className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">
                     {translatedHeading}
                   </h3>
@@ -116,7 +144,7 @@ export default function PoliciesPage({ onAgree, language }: PoliciesPageProps) {
             disabled={!hasScrolledToBottom}
             className={`mx-auto flex w-full max-w-md items-center justify-center gap-3 rounded-2xl px-6 py-4 text-lg font-semibold transition-all ${
               hasScrolledToBottom
-                ? "bg-gradient-to-r from-emerald-500 to-sky-500 text-white shadow-glow hover:scale-[1.01]"
+                ? "bg-gradient-to-r from-brand via-blue-500 to-indigo-500 text-white shadow-[0_10px_30px_rgba(56,189,248,0.35)] hover:translate-y-[-1px]"
                 : "cursor-not-allowed bg-slate-200/80 text-slate-500 dark:bg-slate-800/60 dark:text-slate-400"
             }`}
           >

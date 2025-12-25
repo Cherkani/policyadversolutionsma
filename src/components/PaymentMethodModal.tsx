@@ -20,10 +20,11 @@ export default function PaymentMethodModal({ method, language, onClose }: Paymen
       }
     }
     document.addEventListener("keydown", handleKey)
-    document.body.classList.add("overflow-hidden")
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
     return () => {
       document.removeEventListener("keydown", handleKey)
-      document.body.classList.remove("overflow-hidden")
+      document.body.style.overflow = previousOverflow
     }
   }, [onClose])
 
@@ -47,7 +48,7 @@ export default function PaymentMethodModal({ method, language, onClose }: Paymen
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 p-4 backdrop-blur">
-      <div className="relative w-full max-w-3xl rounded-3xl border border-white/20 bg-white/95 shadow-2xl shadow-black/30 dark:bg-slate-900/95">
+      <div className="relative w-full max-w-3xl max-h-full overflow-y-auto rounded-3xl border border-white/20 bg-white/95 shadow-2xl shadow-black/30 sm:max-h-[90vh] dark:bg-slate-900/95">
         <button
           type="button"
           onClick={onClose}
@@ -56,7 +57,7 @@ export default function PaymentMethodModal({ method, language, onClose }: Paymen
         >
           <X className="h-5 w-5" />
         </button>
-        <div className="grid gap-6 rounded-3xl p-8 lg:grid-cols-2">
+        <div className="grid gap-6 rounded-3xl p-6 sm:p-8 lg:grid-cols-2">
           <div className="space-y-4">
             <div className="flex items-center gap-4">
               <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-inner dark:bg-slate-800">
@@ -70,7 +71,7 @@ export default function PaymentMethodModal({ method, language, onClose }: Paymen
               </div>
             </div>
             {method.instructions && (
-              <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-sky-50 p-4 text-sm text-slate-700 shadow-inner dark:from-slate-800 dark:to-slate-800/70 dark:text-slate-200">
+              <div className="rounded-2xl bg-gradient-to-br from-slate-900/5 to-white/5 p-4 text-sm text-slate-700 shadow-inner dark:from-slate-800 dark:to-slate-800/70 dark:text-slate-200">
                 {translate(method.instructions, language)}
               </div>
             )}
@@ -108,7 +109,7 @@ export default function PaymentMethodModal({ method, language, onClose }: Paymen
             <button
               type="button"
               onClick={copyAllDetails}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-sky-500 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-emerald-200/50 transition hover:scale-[1.01]"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-slate-900 via-brand to-indigo-500 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-slate-500/40 transition hover:scale-[1.01]"
             >
               {copiedField === "all" ? (
                 <>

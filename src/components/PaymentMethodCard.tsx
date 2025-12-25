@@ -12,8 +12,8 @@ interface PaymentMethodCardProps {
 export default function PaymentMethodCard({ method, language, onOpen, isHighlighted }: PaymentMethodCardProps) {
   return (
     <div
-      className={`relative rounded-2xl border border-slate-200/80 bg-white/90 p-6 shadow-lg shadow-slate-200/70 transition-all dark:border-slate-800/70 dark:bg-slate-900/80 ${
-        isHighlighted ? "ring-2 ring-emerald-400" : "hover:-translate-y-1 hover:shadow-2xl"
+      className={`relative rounded-2xl border border-slate-200/80 bg-gradient-to-b from-slate-900/3 to-white/95 p-6 shadow-lg shadow-slate-200/70 transition-all dark:border-slate-800/70 dark:from-slate-900/80 dark:to-slate-900/60 ${
+        isHighlighted ? "ring-2 ring-brand" : "hover:-translate-y-1 hover:shadow-2xl"
       }`}
     >
       <div className="flex items-center gap-4">
@@ -21,7 +21,7 @@ export default function PaymentMethodCard({ method, language, onOpen, isHighligh
           <img src={method.logo || placeholderLogo} alt={`${method.name} logo`} className="h-12 w-12 object-contain" />
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">
             {translate("Payment Methods", language)}
           </p>
           <h3 className="text-xl font-bold text-slate-900 dark:text-white">{method.name}</h3>
@@ -30,9 +30,12 @@ export default function PaymentMethodCard({ method, language, onOpen, isHighligh
 
       <div className="mt-4 grid gap-2 text-sm text-slate-600 dark:text-slate-300">
         {method.details.slice(0, 2).map((detail, index) => (
-          <div key={index} className="flex items-center justify-between rounded-xl bg-slate-50/80 px-3 py-2 dark:bg-slate-800/60">
+          <div
+            key={index}
+            className="flex items-center justify-between rounded-xl bg-white/80 px-3 py-2 shadow-inner dark:bg-slate-800/60"
+          >
             <span className="font-semibold">{translate(detail.label, language)}</span>
-            <span className="font-mono text-xs text-slate-500 dark:text-slate-400 truncate max-w-[140px] text-right">
+            <span className="max-w-[140px] truncate text-right font-mono text-xs text-slate-500 dark:text-slate-400">
               {detail.value}
             </span>
           </div>
@@ -42,7 +45,7 @@ export default function PaymentMethodCard({ method, language, onOpen, isHighligh
       <button
         type="button"
         onClick={() => onOpen(method)}
-        className="mt-6 w-full rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 py-3 text-sm font-semibold text-white transition hover:scale-[1.01] dark:from-slate-700 dark:to-slate-600"
+        className="mt-6 w-full rounded-xl bg-gradient-to-r from-slate-900 via-brand to-indigo-500 py-3 text-sm font-semibold text-white shadow-[0_10px_25px_rgba(15,23,42,0.2)] transition hover:scale-[1.01]"
       >
         {translate("Click on a payment method to view payment details", language)}
       </button>
