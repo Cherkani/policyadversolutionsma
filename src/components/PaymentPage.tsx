@@ -13,7 +13,7 @@ interface PaymentPageProps {
 
 export default function PaymentPage({ language, onBack }: PaymentPageProps) {
   const handleContactSupport = () => {
-    window.open("https://wa.me/1234567890", "_blank")
+    window.open("https://wa.me/212610341885", "_blank")
   }
   const rtl = isRTL(language)
   const backArrow = rtl ? "→" : "←"
