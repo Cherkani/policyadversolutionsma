@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { createPortal } from "react-dom"
 import { Copy, Check, X } from "lucide-react"
 import type { Language, PaymentMethod } from "../types"
 import placeholderLogo from "../assets/logos/placeholder.svg"
@@ -12,6 +13,12 @@ interface PaymentMethodModalProps {
 
 export default function PaymentMethodModal({ method, language, onClose }: PaymentMethodModalProps) {
   const [copiedField, setCopiedField] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    return () => setMounted(false)
+  }, [])
 
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
@@ -46,9 +53,13 @@ export default function PaymentMethodModal({ method, language, onClose }: Paymen
     setTimeout(() => setCopiedField(null), 2000)
   }
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 p-4 backdrop-blur">
-      <div className="relative w-full max-w-3xl max-h-full overflow-y-auto rounded-3xl border border-white/20 bg-white/95 shadow-2xl shadow-black/30 sm:max-h-[90vh] dark:bg-slate-900/95">
+  if (!mounted) {
+    return null
+  }
+
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 px-4 py-6 backdrop-blur sm:p-6">
+      <div className="relative w-full max-w-3xl max-h-[calc(100vh-3rem)] overflow-y-auto rounded-3xl border border-white/20 bg-white/95 shadow-2xl shadow-black/30 sm:max-h-[90vh] dark:bg-slate-900/95">
         <button
           type="button"
           onClick={onClose}
@@ -129,6 +140,7 @@ export default function PaymentMethodModal({ method, language, onClose }: Paymen
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }

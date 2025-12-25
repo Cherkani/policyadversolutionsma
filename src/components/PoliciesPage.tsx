@@ -51,8 +51,15 @@ export default function PoliciesPage({ onAgree, language }: PoliciesPageProps) {
             <p className="text-sm uppercase tracking-[0.3em] text-white/70">
               {translate("Live translation", language)}
             </p>
-            <h1 className="mt-2 text-3xl font-bold lg:text-4xl">
-              {translate("Service & Policy Selection", language)}
+            <h1 className="relative mt-2 text-3xl font-bold tracking-tight text-transparent lg:text-4xl">
+              <span className="bg-gradient-to-r from-white via-slate-100 to-blue-200 bg-clip-text drop-shadow-[0_5px_15px_rgba(15,23,42,0.4)]">
+                {translate("Service & Policy Selection", language)}
+              </span>
+              <span className="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/40 via-cyan-200/30 to-transparent blur-sm mix-blend-screen" aria-hidden />
+              <span className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-60"
+                style={{ clipPath: "polygon(10% 0%, 30% 0%, 80% 100%, 60% 100%)" }}
+                aria-hidden
+              />
             </h1>
             <p className="mt-2 text-white/70">
               {translate("Select a category and review the corresponding policy", language)}
@@ -88,54 +95,56 @@ export default function PoliciesPage({ onAgree, language }: PoliciesPageProps) {
           <div className="absolute bottom-10 right-10 h-40 w-40 rounded-full bg-brand/20" />
           <div className="absolute top-6 left-1/4 h-32 w-32 rounded-full bg-indigo-200/30 dark:bg-indigo-900/20" />
         </div>
-        <div ref={contentRef} className="relative max-h-[70vh] overflow-y-auto p-6 sm:p-8">
-          <div className="flex flex-col gap-6">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400 dark:text-slate-500">
-                {translate(selectedPolicy.label, language)}
-              </p>
-              <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
-                {translate(selectedPolicy.title, language)}
-              </h2>
+        <div ref={contentRef} className="relative max-h-full overflow-y-auto sm:max-h-[70vh]">
+          <div className="px-4 py-6 sm:px-8 sm:py-8">
+            <div className="flex flex-col gap-6">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400 dark:text-slate-500">
+                  {translate(selectedPolicy.label, language)}
+                </p>
+                <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+                  {translate(selectedPolicy.title, language)}
+                </h2>
+              </div>
+              <div className="grid gap-3 text-xs font-semibold text-slate-600 dark:text-slate-300 md:grid-cols-2">
+                <span className="rounded-2xl bg-slate-900/5 px-4 py-2 shadow-inner dark:bg-slate-900/60">
+                  {translate("Step 1 · Review Policies", language)}
+                </span>
+                <span className="rounded-2xl bg-slate-900/5 px-4 py-2 shadow-inner dark:bg-slate-900/60">
+                  {translate("Language", language)}: {getLanguageLabel(language)}
+                </span>
+              </div>
             </div>
-            <div className="grid gap-3 text-xs font-semibold text-slate-600 dark:text-slate-300 md:grid-cols-2">
-              <span className="rounded-2xl bg-slate-900/5 px-4 py-2 shadow-inner dark:bg-slate-900/60">
-                {translate("Step 1 · Review Policies", language)}
-              </span>
-              <span className="rounded-2xl bg-slate-900/5 px-4 py-2 shadow-inner dark:bg-slate-900/60">
-                {translate("Language", language)}: {getLanguageLabel(language)}
-              </span>
-            </div>
-          </div>
-          <div className="mt-6 space-y-10">
-            {selectedPolicy.sections.map((section, index) => {
-              const translatedHeading = translate(section.heading, language)
-              const translatedContent = Array.isArray(section.content)
-                ? section.content.map((line) => translate(line, language))
-                : translate(section.content, language)
+            <div className="mt-6 space-y-10">
+              {selectedPolicy.sections.map((section, index) => {
+                const translatedHeading = translate(section.heading, language)
+                const translatedContent = Array.isArray(section.content)
+                  ? section.content.map((line) => translate(line, language))
+                  : translate(section.content, language)
 
-              return (
-                <section
-                  key={index}
-                  className="rounded-2xl border border-slate-100/70 bg-white/90 p-6 shadow-sm dark:border-slate-800/60 dark:bg-slate-900/70"
-                >
-                  <h3 className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">
-                    {translatedHeading}
-                  </h3>
-                  <div className="mt-4 text-slate-700 dark:text-slate-200">
-                    {Array.isArray(translatedContent) ? (
-                      translatedContent.map((line, idx) => (
-                        <p key={idx} className={line === "" ? "h-3" : "leading-relaxed"}>
-                          {line}
-                        </p>
-                      ))
-                    ) : (
-                      <p className="leading-relaxed">{translatedContent}</p>
-                    )}
-                  </div>
-                </section>
-              )
-            })}
+                return (
+                  <section
+                    key={index}
+                    className="rounded-2xl border border-slate-100/70 bg-white/90 p-6 shadow-sm dark:border-slate-800/60 dark:bg-slate-900/70"
+                  >
+                    <h3 className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">
+                      {translatedHeading}
+                    </h3>
+                    <div className="mt-4 text-slate-700 dark:text-slate-200">
+                      {Array.isArray(translatedContent) ? (
+                        translatedContent.map((line, idx) => (
+                          <p key={idx} className={line === "" ? "h-3" : "leading-relaxed"}>
+                            {line}
+                          </p>
+                        ))
+                      ) : (
+                        <p className="leading-relaxed">{translatedContent}</p>
+                      )}
+                    </div>
+                  </section>
+                )
+              })}
+            </div>
           </div>
         </div>
         <div className="border-t border-slate-200/70 bg-slate-50/80 p-6 dark:border-slate-800/70 dark:bg-slate-900/60">
